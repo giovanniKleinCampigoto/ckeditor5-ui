@@ -9,9 +9,9 @@
  * @module ui/icon/iconview
  */
 
-import View from '../view';
+import View from "../view";
 
-import '../../theme/components/icon/icon.css';
+import "../../theme/components/icon/icon.css";
 
 /**
  * The icon view class.
@@ -33,7 +33,7 @@ export default class IconView extends View {
 		 * @observable
 		 * @member {String} #content
 		 */
-		this.set( 'content', '' );
+		this.set("content", "");
 
 		/**
 		 * This attribute specifies the boundaries to which the
@@ -43,7 +43,7 @@ export default class IconView extends View {
 		 * @default '0 0 20 20'
 		 * @member {String} #viewBox
 		 */
-		this.set( 'viewBox', '0 0 20 20' );
+		this.set("viewBox", "0 0 20 20");
 
 		/**
 		 * The fill color of the child `path.ck-icon__fill`.
@@ -52,19 +52,16 @@ export default class IconView extends View {
 		 * @default ''
 		 * @member {String} #fillColor
 		 */
-		this.set( 'fillColor', '' );
+		this.set("fillColor", "");
 
-		this.setTemplate( {
-			tag: 'svg',
-			ns: 'http://www.w3.org/2000/svg',
+		this.setTemplate({
+			tag: "svg",
+			ns: "http://www.w3.org/2000/svg",
 			attributes: {
-				class: [
-					'ck',
-					'ck-icon'
-				],
-				viewBox: bind.to( 'viewBox' )
+				class: ["ck", "ck-icon"],
+				viewBox: bind.to("viewBox")
 			}
-		} );
+		});
 	}
 
 	/**
@@ -78,14 +75,14 @@ export default class IconView extends View {
 
 		// This is a hack for lack of innerHTML binding.
 		// See: https://github.com/ckeditor/ckeditor5-ui/issues/99.
-		this.on( 'change:content', () => {
+		this.on("change:content", () => {
 			this._updateXMLContent();
 			this._colorFillPaths();
-		} );
+		});
 
-		this.on( 'change:fillColor', () => {
+		this.on("change:fillColor", () => {
 			this._colorFillPaths();
-		} );
+		});
 	}
 
 	/**
@@ -94,19 +91,23 @@ export default class IconView extends View {
 	 * @private
 	 */
 	_updateXMLContent() {
-		if ( this.content ) {
-			const parsed = new DOMParser().parseFromString( this.content.trim(), 'image/svg+xml' );
-			const svg = parsed.querySelector( 'svg' );
-			const viewBox = svg.getAttribute( 'viewBox' );
+		const nodeEnvTest = process.env.NODE_ENV === "test";
+		if (this.content && !nodeEnvTest) {
+			const parsed = new DOMParser().parseFromString(
+				this.content.trim(),
+				"image/svg+xml"
+			);
+			const svg = parsed.querySelector("svg");
+			const viewBox = svg.getAttribute("viewBox");
 
-			if ( viewBox ) {
+			if (viewBox) {
 				this.viewBox = viewBox;
 			}
 
-			this.element.innerHTML = '';
+			this.element.innerHTML = "";
 
-			while ( svg.childNodes.length > 0 ) {
-				this.element.appendChild( svg.childNodes[ 0 ] );
+			while (svg.childNodes.length > 0) {
+				this.element.appendChild(svg.childNodes[0]);
 			}
 		}
 	}
@@ -117,10 +118,10 @@ export default class IconView extends View {
 	 * @private
 	 */
 	_colorFillPaths() {
-		if ( this.fillColor ) {
-			this.element.querySelectorAll( '.ck-icon__fill' ).forEach( path => {
+		if (this.fillColor) {
+			this.element.querySelectorAll(".ck-icon__fill").forEach(path => {
 				path.style.fill = this.fillColor;
-			} );
+			});
 		}
 	}
 }
